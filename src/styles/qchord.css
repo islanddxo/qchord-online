@@ -1,0 +1,1025 @@
+/* Page — instrument centered; logo/controls are absolute chrome */
+.qchord-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 1rem 0.75rem 2rem;
+  overflow: hidden;
+  background: rgb(255, 197, 208);
+  color: #f4eee6;
+  font-family: "Segoe UI", system-ui, sans-serif;
+}
+
+/* Logo + controls column (toggle opens downward under logo) */
+.qchord-chrome {
+  position: absolute;
+  top: 0.75rem;
+  left: 2rem;
+  z-index: 30;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
+  max-width: min(17.5rem, calc(100vw - 1.25rem));
+  pointer-events: auto;
+}
+
+.qchord-logo-container {
+  position: relative;
+  width: clamp(3rem, 10vw, 6.5rem);
+  line-height: 0;
+}
+
+.qchord-logo {
+  display: block;
+  width: 150%;
+  height: auto;
+}
+
+/* Controls: under logo, panel drops down */
+.qchord-controls-menu {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 0.35rem;
+}
+
+.qchord-controls-toggle {
+  align-self: flex-start;
+  margin-top: 1rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(40, 32, 28, 0.85);
+  border-radius: 0.45rem;
+  background: linear-gradient(165deg, #3a3430 0%, #2a2420 45%, #1e1a18 100%);
+  color: #f0e8dc;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.45);
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.12s ease;
+}
+
+.qchord-controls-toggle:hover {
+  background: linear-gradient(165deg, #443c36 0%, #322c28 45%, #262220 100%);
+  box-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.qchord-controls-toggle:focus-visible {
+  outline: 2px solid rgba(244, 252, 126, 0.65);
+  outline-offset: 2px;
+}
+
+.qchord-controls-toggle:active {
+  transform: translateY(1px);
+}
+
+.qchord-controls-panel-clip {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  max-width: min(19rem, calc(100vw - 1.5rem));
+  margin-top: 0.35rem;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    grid-template-rows 0.4s cubic-bezier(0.33, 1, 0.68, 1),
+    opacity 0.28s ease;
+}
+
+.qchord-controls-menu--open .qchord-controls-panel-clip {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.qchord-controls-panel-clip-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.qchord-controls-panel {
+  width: 100%;
+  padding: 0.55rem 0.65rem 0.6rem;
+  border: 1px solid rgba(40, 32, 28, 0.9);
+  border-radius: 0.5rem;
+  background: linear-gradient(180deg, #2e2824 0%, #1c1816 100%);
+  color: #ebe4d8;
+  font-size: 0.7rem;
+  line-height: 1.45;
+  box-shadow:
+    0 4px 14px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.qchord-controls-panel-title {
+  margin: 0 0 0.4rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #f5ecdf;
+}
+
+.qchord-controls-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.qchord-controls-item {
+  margin: 0;
+  padding: 0.12rem 0;
+}
+
+.qchord-controls-kbd {
+  font-weight: 700;
+  color: #f8f2e6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qchord-controls-panel-clip {
+    transition: none;
+  }
+
+  .qchord-controls-toggle {
+    transition: none;
+  }
+}
+
+/* Shell container — scales with viewport; overlay uses % + cqi inside shell */
+.qchord-shell-outer {
+  width: min(1100px, 96vw);
+  max-width: 100%;
+  flex-shrink: 0;
+  margin: 0;
+  color: rgb(244, 252, 126);
+}
+
+.qchord-shell {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: clamp(4px, 1.2cqi, 12px);
+  filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.447));
+  container-type: inline-size;
+  container-name: qchord-shell;
+}
+
+.qchord-shell-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  vertical-align: middle;
+  user-select: none;
+  pointer-events: none;
+}
+
+.qchord-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.qchord-overlay .qchord-region {
+  pointer-events: auto;
+}
+
+/* Powered off: only master power column stays interactive */
+.qchord-instrument-off .qchord-region-display,
+.qchord-instrument-off .qchord-region-chord,
+.qchord-instrument-off .qchord-region-strum,
+.qchord-instrument-off .qchord-region-voice,
+.qchord-instrument-off .qchord-region-rhythm {
+  pointer-events: none;
+}
+
+.qchord-instrument-off .qchord-region-master {
+  pointer-events: none;
+}
+
+.qchord-instrument-off .qchord-power-stack {
+  pointer-events: auto;
+}
+
+.qchord-instrument-off .qchord-ctrl-led-on {
+  background: #2a1010;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+
+.qchord-instrument-off .qchord-marquee-mask {
+  display: none;
+}
+
+
+
+
+.qchord-instrument-off .qchord-display-bpm-num{
+  display: none;
+}
+
+
+
+
+
+
+
+/* Regions tuned to bundled shell (left tail = chords, center = display/controls, right = strum) */
+.qchord-region-display {
+  position: absolute;
+  top: 56%;
+  left: 39%;
+  width: 26%;
+  height: 16%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qchord-region-master {
+  position: absolute;
+  top: 18%; /*starred*/
+  left: 36%;
+  width: 30%;
+  height: 28%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.qchord-region-chord {
+  position: absolute;
+  top: 54.25%;
+  left: 12%;
+  width: 30%;
+  height: 20%;
+  display: flex;
+  align-items: center;
+}
+
+.qchord-region-strum {
+  position: absolute;
+  top: 45.3%;
+  left: 58%;
+  width: 22%;
+  height: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(-61deg);
+  transform-origin: center center;
+}
+
+.qchord-region-voice {
+  position: absolute;
+  top: 42.75%;
+  left: 45%;
+  
+  height: 22%;
+}
+
+.qchord-region-rhythm {
+  position: absolute;
+  top: 42.75%;
+  left: 56%;
+  
+  height: 22%;
+}
+
+/* Display: BPM number, − BPM + row, marquee */
+.qchord-display {
+  width: 30%;
+  height: 30%;
+  max-width: 30%;
+  max-height: 40%;
+  background: linear-gradient(180deg, #0d1a12 0%, #071208 100%);
+  border-radius: clamp(3px, 1cqi, 6px);
+  border: 2px solid #1f3328;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.5),
+    0 0 12px rgba(80, 220, 140, 0.12);
+  padding: clamp(0.06rem, 1cqi, 0.16rem) clamp(0.12rem, 1.8cqi, 0.3rem);
+  font-family: "Consolas", "SF Mono", ui-monospace, monospace;
+  font-size: clamp(0.28rem, 3.4cqi, 0.68rem);
+  color: #7ae8a8;
+  text-shadow: 0 0 6px rgba(100, 255, 160, 0.35);
+  overflow: hidden;
+}
+
+.qchord-display-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(0.02rem, 0.8cqi, 0.04rem);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.qchord-display-bpm-num {
+  font-size: clamp(0.42rem, 5cqi, 0.65rem);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 5%;
+}
+
+.qchord-display-bpm-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.12rem, 2cqi, 0.35rem);
+  flex-shrink: 0;
+  position: absolute;
+  top: 142.5%;
+  right: 35.5%;
+}
+
+.qchord-display-bpm-mid {
+  font-size: clamp(0.22rem, 2.8cqi, 0.52rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  opacity: 0.9;
+}
+
+
+
+.qchord-marquee-mask {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-size: 100% 100%;
+}
+
+.qchord-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: qchord-marquee-scroll 22s linear infinite;
+}
+
+.qchord-marquee-text {
+  flex-shrink: 0;
+  padding-right: 3em;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+@keyframes qchord-marquee-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qchord-marquee-track {
+    animation: none;
+    transform: none;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .qchord-marquee-text:last-child {
+    display: none;
+  }
+}
+
+.qchord-display-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  height: 100%;
+  justify-content: center;
+}
+
+.qchord-display-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  align-items: baseline;
+  line-height: 1.2;
+}
+
+.qchord-display-chord {
+  font-size: 1.05em;
+  letter-spacing: 0.04em;
+  justify-content: center;
+}
+
+.qchord-display-small {
+  font-size: 0.85em;
+  opacity: 0.85;
+  justify-content: center;
+}
+
+.qchord-display-label {
+  opacity: 0.55;
+  margin-right: 0.1rem;
+}
+
+.qchord-display-sp {
+  margin-left: 0.35rem;
+}
+
+.qchord-on {
+  color: #9f8;
+}
+
+.qchord-off {
+  color: #666;
+  text-shadow: none;
+}
+
+/* Chord panel */
+.qchord-chord-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  width: 100%;
+  transform: rotate(-30deg);
+}
+
+
+
+.qchord-chord-header-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.65rem;
+  margin-bottom: -3%;
+  margin-right: 1%;
+}
+
+.qchord-chord-row {
+  display: flex;
+  align-items: center;
+  gap: 0.95rem;
+  transform: rotate(30deg);
+}
+
+.qchord-chord-row-label {
+  width: clamp(1rem, 12cqi, 1.6rem);
+  flex-shrink: 0;
+  font-size: clamp(0.28rem, 3.2cqi, 0.55rem);
+  opacity: 0.75;
+  text-align: right;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: rgb(255, 248, 176);
+}
+
+.qchord-chord-corner {
+  width: clamp(1rem, 12cqi, 1.6rem);
+  flex-shrink: 0;
+}
+
+.qchord-chord-keys {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(0.06rem, 1.2cqi, 0.18rem);
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+.qchord-chord-keys-labels {
+  align-items: flex-end;
+  padding-bottom: 0.05rem;
+  transform: rotate(30deg);
+}
+
+.qchord-chord-col-label {
+  flex: 1;
+  min-width: 0;
+  text-align: center;
+  font-size: clamp(0.26rem, 3cqi, 0.52rem);
+  font-weight: 700;
+  font-size: 0.65em;
+  letter-spacing: 0.02em;
+  opacity: 0.88;
+  color: rgb(255, 248, 176);
+}
+
+
+.qchord-chord-btn {
+  flex: 1;
+  min-width: 0;
+  max-width: clamp(0.45rem, 8cqi, 0.85rem);
+  margin: 0 auto;
+  aspect-ratio: 1 / 1.75;
+  min-height: clamp(0.5rem, 10cqi, 1.2rem);
+  height: auto;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 80%;
+  background: linear-gradient(180deg, #390e1686 0%, #733a4e9a 100%);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.44),
+    inset 0 1px 0 rgba(60, 58, 58, 0.383);
+  transition:
+    filter 0.08s,
+    box-shadow 0.08s;
+  transform: rotate(-30deg);
+}
+
+.qchord-chord-btn:hover {
+  filter: brightness(1.06);
+}
+
+.qchord-chord-btn-active {
+  background: linear-gradient(180deg, #b8f0c8 0%, #6ecf8a 100%);
+  box-shadow:
+    0 0 12px rgba(100, 255, 160, 0.38),
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.qchord-chord-btn:active {
+  filter: brightness(0.96);
+}
+
+/* Strum strip */
+.qchord-strum-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.qchord-strum-strip {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 72%;
+  gap: clamp(1px, 0.4cqi, 2px);
+  padding: clamp(2px, 0.8cqi, 4px);
+  border-radius: clamp(4px, 1.5cqi, 10px);
+  background: rgba(245, 241, 188, 0.12);
+}
+
+.qchord-strum-section {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.qchord-strum-section-hit {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: clamp(2px, 0.8cqi, 4px);
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.25);
+  transition:
+    background 0.05s,
+    box-shadow 0.05s;
+}
+
+.qchord-strum-section-hit-lit {
+  background: rgba(255, 255, 255, 0.24);
+  box-shadow:
+    0 0 14px rgba(100, 255, 160, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.45),
+    0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.qchord-strum-section:hover .qchord-strum-section-hit,
+.qchord-strum-section:focus-visible .qchord-strum-section-hit {
+  background: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 0 12px rgba(255, 220, 160, 0.35);
+}
+
+.qchord-strum-section:active .qchord-strum-section-hit {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Voice / rhythm selector strip (QChord-style) */
+.qchord-strip {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: clamp(0.08rem, 1.2cqi, 0.28rem);
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  row-gap: 10%;
+}
+
+
+.qchord-strip-control-set {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: clamp(0.06rem, 1cqi, 0.14rem);
+  position: absolute;
+}
+
+.qchord-strip-control-set:nth-child(3) {
+  left: 90%;
+  top: 30%;
+}
+.qchord-strip-control-set:nth-child(1) {
+  left: 140%;
+  top: 8%;
+}
+
+.qchord-strip-mini {
+  width: 78%;
+  max-width: clamp(0.55rem, 9cqi, 1.05rem);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #4f1b1c84 0%, #320f1164 48%, #220b0c90 100%);
+  box-shadow:
+    1px 0 1px rgba(0, 0, 0, 0.793),
+    inset 0 1px 0 rgba(142, 142, 142, 0.12),
+    inset 0 -1px 0px rgba(79, 79, 79, 0.35);
+  transition:
+    filter 0.08s,
+    box-shadow 0.08s,
+    transform 0.08s;
+}
+
+
+
+.qchord-strip-mini:active {
+  filter: brightness(0.92);
+  box-shadow:
+    0 0 1px rgba(220, 80, 80, 0.491),
+    inset 0 1px 1px rgba(0, 0, 0, 0.022);
+  transform: scale(0.99);
+}
+
+
+.qchord-strip-mini-up {
+  height: clamp(0.28rem, 4.2cqi, 0.75rem);
+  border-radius: 70% 50% 35% 35% / 85% 75% 22% 22%;
+  transform: translateX(20%)
+}
+
+
+.qchord-strip-mini-down {
+  height: clamp(0.28rem, 4.2cqi, 0.75rem);
+  border-radius: 35% 35% 70% 50% / 22% 22% 85% 75%;
+  transform: translateX(-20%)
+}
+
+.qchord-strip-set-label {
+  font-size: clamp(0.2rem, 2.4cqi, 0.4rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: capitalize;
+  text-align: center;
+  font-style: italic;
+  line-height: 1.1;
+  color: rgb(255, 248, 176);
+  user-select: none;
+  pointer-events: none;
+}
+
+.qchord-strip-core {
+  flex: 1 100%;
+  
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: clamp(0.06rem, 1cqi, 0.2rem);
+}
+
+.qchord-strip-labels {
+  font-style: italic;
+  height: 55%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex: 0 0 38%;
+  min-width: 0;
+  padding: clamp(1rem, 0.6cqi, 0.12rem) 0;
+}
+.qchord-region-voice .qchord-strip-labels .qchord-strip-label:nth-child(1) {
+  transform: translateX(50%);
+}
+.qchord-region-voice .qchord-strip-labels .qchord-strip-label:nth-child(2) {
+  transform: translateX(-25%);
+}
+.qchord-region-voice .qchord-strip-labels .qchord-strip-label:nth-child(3) {
+  transform: translateX(-100%);
+}
+.qchord-region-voice .qchord-strip-labels .qchord-strip-label:nth-child(4) {
+  transform: translateX(-175%);
+}
+
+.qchord-region-rhythm .qchord-strip-labels .qchord-strip-label:nth-child(1) {
+  transform: translateX(110%);
+}
+.qchord-region-rhythm .qchord-strip-labels .qchord-strip-label:nth-child(2) {
+  transform: translateX(10%);
+}
+.qchord-region-rhythm .qchord-strip-labels .qchord-strip-label:nth-child(3) {
+  transform: translateX(-100%);
+}
+.qchord-region-rhythm .qchord-strip-labels .qchord-strip-label:nth-child(4) {
+  transform: translateX(-150%);
+}
+
+.qchord-strip-label {
+  font-size: clamp(0.12rem, 2.6cqi, 0.48rem);
+  font-weight: 600;
+  line-height: 1.15;
+  color: rgb(255, 248, 176);
+  white-space: nowrap;
+  text-overflow: visible;
+}
+
+
+.qchord-strip-track {
+  position: relative;
+  min-width: clamp(0.1rem, 5.5cqi, 0.75rem);
+  margin: clamp(0.06rem, 1cqi, 0.18rem) 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2a2228 0%, #1a1418 100%);
+  box-shadow:
+    inset 0 2px 6px rgba(0, 0, 0, 0.55),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+  transform: rotate(29deg);
+  height: 55%;
+}
+
+.qchord-strip-marker {
+  position: absolute;
+  left: 50%;
+  width: 76%;
+  max-width: clamp(0.2rem, 6cqi, 0.55rem);
+  height: clamp(0.12rem, 2.2cqi, 0.26rem);
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ff9a8e 0%, #e02020ca 55%, #a81818d5 100%);
+  box-shadow:
+    0 0 5px rgba(255, 60, 60, 0.55),
+    0 1px 2px rgba(0, 0, 0, 0.45);
+  transform: translate(-50%, 350%);
+  pointer-events: none;
+}
+
+/* Master controls */
+
+
+.qchord-master-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+  justify-content: center;
+  align-items: center;
+  transform: rotate(61deg)
+  
+}
+
+.qchord-master-buttons {
+  gap: clamp(0.2rem, 3cqi, 0.75rem);
+  align-items: flex-end;
+  position: absolute;
+  top: 108%;
+  left: -3%;
+  z-index: 100;
+  
+}
+
+#root > div > div > div > div > div.qchord-region.qchord-region-master > div > div.qchord-master-row.qchord-master-buttons > div:nth-child(3) {
+  left: 20% !important;
+}
+
+.qchord-ctrl-stack {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.05rem, 0.8cqi, 0.1rem);
+  padding-top: clamp(0.14rem, 2.2cqi, 0.28rem);
+}
+
+.qchord-ctrl-led {
+  position: relative;
+  top: 0;
+  right: 8%;
+  width: clamp(0.14rem, 2.2cqi, 0.26rem);
+  height: clamp(0.14rem, 2.2cqi, 0.26rem);
+  border-radius: 50%;
+  background: #2a1010;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.75);
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+.qchord-ctrl-led-on {
+  background: radial-gradient(circle at 30% 30%, #ff6b6b, #c01010 55%, #600808);
+  box-shadow:
+    0 0 7px rgba(255, 40, 40, 0.85),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.qchord-ctrl-face {
+  min-width: clamp(1.5rem, 16cqi, 2.6rem);
+  min-height: clamp(0.85rem, 9cqi, 1.45rem);
+  padding: clamp(0.12rem, 1.8cqi, 0.22rem) clamp(0.2rem, 3cqi, 0.42rem);
+}
+
+.qchord-ctrl-underlabel {
+  font-size: clamp(0.22rem, 2.6cqi, 0.42rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: none;
+  color: rgba(244, 238, 232, 0.88);
+  text-align: center;
+  line-height: 1.15;
+  max-width: 4.5rem;
+  transform: rotate(-60deg) translateX(20%) translateY(45%);
+  margin-top: 10%;
+  font-style: italic;
+}
+
+.qchord-ctrl-stack-muted .qchord-ctrl-face:disabled {
+  cursor: not-allowed;
+}
+
+.qchord-master-volume-knob {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 84%;
+  left: 15%
+}
+
+.qchord-knob-silver-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.06rem, 1cqi, 0.14rem);
+  margin: 0;
+  cursor: pointer;
+}
+
+.qchord-knob-silver {
+  -webkit-appearance: none;
+  appearance: none;
+  width: clamp(1rem, 20cqi, 2.4rem);
+  height: clamp(1rem, 20cqi, 2.4rem);
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  transform: rotate(-90deg);
+  background:
+    conic-gradient(
+      from 45deg,
+      #848689 0deg,
+      #d8dce2 35deg,
+      #f2f4f7 70deg,
+      #9a9ea4 130deg,
+      #818487 180deg,
+      #b8bcc2 220deg,
+      #e8eaee 280deg,
+      #8a8e91 360deg
+    );
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.5),
+    inset 0 2px 6px rgba(255, 255, 255, 0.55),
+    inset 0 -3px 8px rgba(0, 0, 0, 0.35);
+}
+
+
+
+.qchord-knob-silver::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: clamp(0.22rem, 3cqi, 0.4rem);
+  height: clamp(0.55rem, 6cqi, 0.95rem);
+  border-radius: 2px;
+  background: linear-gradient(180deg, #3a3d42 0%, #1a1c1f 100%);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  margin-top: 0;
+}
+
+.qchord-knob-silver::-moz-range-thumb {
+  width: clamp(0.22rem, 3cqi, 0.4rem);
+  height: clamp(0.55rem, 6cqi, 0.95rem);
+  border-radius: 2px;
+  border: none;
+  background: linear-gradient(180deg, #3a3d42 0%, #1a1c1f 100%);
+  box-shadow:
+    1px 1px 1px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+}
+
+.qchord-knob-silver-caption {
+  font-size: clamp(0.24rem, 2.8cqi, 0.40rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: rgba(244, 238, 232, 0.9);
+  font-style: italic;
+  transform: translateX(-25%);
+}
+
+.qchord-ctrl {
+  flex: 1;
+  min-width: 20%;
+  max-width: clamp(0.45rem, 8cqi, 1.5rem);
+  margin: 0 auto;
+  aspect-ratio: 1.5 / 2;
+  min-height: clamp(0.7rem, 10cqi, 1.2rem);
+  height: auto;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 60%;
+  background: linear-gradient(180deg, #efe6de 0%, #c4b4a8 100%);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+  transform: rotate(30deg) !important;
+  background:
+    conic-gradient(
+      from 45deg,
+      #9fa1a2 0deg,
+      #d8dce2 35deg,
+      #f2f4f7 70deg,
+      #a8aaad 130deg,
+      #b7b7b7 180deg,
+      #b8bcc2 220deg,
+      #e8eaee 280deg,
+      #a1a2a2 360deg
+    );
+}
+
+.qchord-ctrl:hover {
+  filter: brightness(1.05);
+}
+
+
+.qchord-bpm-btn {
+  flex: 1;
+  width: 20px;
+  min-height: 16px;
+  color: rgb(255, 248, 176);
+  margin: 0 auto;
+  height: auto;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  border-radius: 60%;
+  background: linear-gradient(180deg, #4f1b1c84 0%, #320f1164 48%, #220b0c90 100%);
+  box-shadow:
+  1px 0 1px rgba(0, 0, 0, 0.793),
+  inset 0 1px 0 rgba(142, 142, 142, 0.12),
+  inset 0 1px 0px rgba(79, 79, 79, 0.35);
+  transition:
+    filter 0.08s,
+    box-shadow 0.08s;
+}
