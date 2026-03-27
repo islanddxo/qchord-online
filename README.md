@@ -3,8 +3,8 @@
 
 A browser-based virtual instrument inspired by the QChord, allowing users to play chords, strum melodies, and trigger rhythms in real time using keyboard or mouse.
 
-**Live Demo:** 
-**GitHub:** 
+**Live Demo:** https://qchord-online.vercel.app
+**GitHub:** https://github.com/islanddxo/qchord-online.git
 
 ---
 
