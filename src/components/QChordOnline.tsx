@@ -11,8 +11,13 @@ import {
   stopAutoChordSustain,
 } from "../audio/audioEngine";
 import { getStrumplateNotes, isRoot, type Root } from "../audio/chordUtils";
+import { useInstrumentViewportFit } from "../hooks/useInstrumentViewportFit";
 import { useKeyboardControls } from "../hooks/useKeyboardControls";
 import { useQChordAudioEffects } from "../hooks/useQChordAudioEffects";
+import {
+  QCHORD_DESIGN_HEIGHT,
+  QCHORD_DESIGN_WIDTH,
+} from "../layout/qchordDesign";
 import ChordPanel from "./ChordPanel";
 import ControlsPanel from "./ControlsPanel";
 import DisplayScreen from "./DisplayScreen";
@@ -22,6 +27,7 @@ import StrumPlate from "./StrumPlate";
 import VoiceSelector from "./VoiceSelector";
 
 export default function QChordOnline() {
+  const { stageRef, scale, rotated } = useInstrumentViewportFit();
   const [state, setState] = useState<AppState>(INITIAL_STATE);
   const [audioReady, setAudioReady] = useState(false);
   const [strumLitIndex, setStrumLitIndex] = useState<number | null>(null);
@@ -142,52 +148,63 @@ export default function QChordOnline() {
         </div>
         <ControlsPanel />
       </div>
-      <div
-        className="qchord-shell-outer"
-        onPointerDownCapture={onShellPointerDown}
-      >
-        <div className="qchord-shell">
-          <img
-            className="qchord-shell-img"
-            src={shellImg}
-            alt=""
-            draggable={false}
-          />
+      <div className="qchord-viewport-stage" ref={stageRef}>
+        <div
+          className={`qchord-instrument-scaler${rotated ? " qchord-instrument-scaler--rotated" : ""}`}
+          style={{
+            width: QCHORD_DESIGN_WIDTH,
+            height: QCHORD_DESIGN_HEIGHT,
+            transform: `translate(-50%, -50%)${rotated ? " rotate(-90deg)" : ""} scale(${scale})`,
+          }}
+        >
           <div
-            className={`qchord-overlay ${!state.poweredOn ? "qchord-instrument-off" : ""}`}
-            aria-hidden={false}
+            className="qchord-shell-outer"
+            onPointerDownCapture={onShellPointerDown}
           >
-            <div className="qchord-region qchord-region-display">
-              <DisplayScreen state={state} />
-            </div>
-
-            <div className="qchord-region qchord-region-master">
-              <MasterControls state={state} setState={setState} />
-            </div>
-
-            <div className="qchord-region qchord-region-chord">
-              <ChordPanel
-                currentRoot={state.currentRoot}
-                currentQuality={state.currentQuality}
-                poweredOn={state.poweredOn}
-                onChordPointerDown={onChordPointerDown}
-                onChordPointerUp={onChordPointerUp}
+            <div className="qchord-shell">
+              <img
+                className="qchord-shell-img"
+                src={shellImg}
+                alt=""
+                draggable={false}
               />
-            </div>
+              <div
+                className={`qchord-overlay ${!state.poweredOn ? "qchord-instrument-off" : ""}`}
+                aria-hidden={false}
+              >
+                <div className="qchord-region qchord-region-display">
+                  <DisplayScreen state={state} />
+                </div>
 
-            <div className="qchord-region qchord-region-strum">
-              <StrumPlate
-                onSectionTrigger={onStrumIndex}
-                litIndex={state.poweredOn ? strumLitIndex : null}
-              />
-            </div>
+                <div className="qchord-region qchord-region-master">
+                  <MasterControls state={state} setState={setState} />
+                </div>
 
-            <div className="qchord-region qchord-region-voice">
-              <VoiceSelector state={state} setState={setState} />
-            </div>
+                <div className="qchord-region qchord-region-chord">
+                  <ChordPanel
+                    currentRoot={state.currentRoot}
+                    currentQuality={state.currentQuality}
+                    poweredOn={state.poweredOn}
+                    onChordPointerDown={onChordPointerDown}
+                    onChordPointerUp={onChordPointerUp}
+                  />
+                </div>
 
-            <div className="qchord-region qchord-region-rhythm">
-              <RhythmSelector state={state} setState={setState} />
+                <div className="qchord-region qchord-region-strum">
+                  <StrumPlate
+                    onSectionTrigger={onStrumIndex}
+                    litIndex={state.poweredOn ? strumLitIndex : null}
+                  />
+                </div>
+
+                <div className="qchord-region qchord-region-voice">
+                  <VoiceSelector state={state} setState={setState} />
+                </div>
+
+                <div className="qchord-region qchord-region-rhythm">
+                  <RhythmSelector state={state} setState={setState} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

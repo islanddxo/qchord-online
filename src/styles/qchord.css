@@ -1,19 +1,52 @@
-/* Page — instrument centered; logo/controls are absolute chrome */
+/* Page — full viewport, no scroll; instrument scales inside stage below */
 .qchord-page {
   position: relative;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  align-items: stretch;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100vw;
+  height: 100%;
+  min-height: 100dvh;
+  max-height: 100dvh;
   margin: 0;
-  padding: 1rem 0.75rem 2rem;
+  padding: 0;
   overflow: hidden;
   background: rgb(255, 197, 208);
   color: #f4eee6;
   font-family: "Segoe UI", system-ui, sans-serif;
 }
 
+/* Fills space under absolute chrome; instrument is centered inside via scaler */
+.qchord-viewport-stage {
+  position: relative;
+  flex: 1 1 auto;
+  width: 110% ;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding-top: max(0px, env(safe-area-inset-top, 0px));
+  padding-right: max(0px, env(safe-area-inset-right, 0px));
+  padding-bottom: max(0px, env(safe-area-inset-bottom, 0px));
+  padding-left: max(0px, env(safe-area-inset-left, 0px));
+}
+
+/* Design box 1080×810 — same shell/overlay coordinates as the old centered 50% of native frame */
+.qchord-instrument-scaler {
+  position: absolute;
+  left: 48%;
+  top: 54%;
+  transform-origin: center center;
+  pointer-events: auto;
+  backface-visibility: hidden;
+}
+.qchord-instrument-scaler--rotated {
+    top: 50%;
+    left: 50%;
+  }
 /* Logo + controls column (toggle opens downward under logo) */
 .qchord-chrome {
   position: absolute;
@@ -27,6 +60,8 @@
   max-width: min(17.5rem, calc(100vw - 1.25rem));
   pointer-events: auto;
 }
+
+
 
 .qchord-logo-container {
   position: relative;
@@ -166,11 +201,11 @@
   }
 }
 
-/* Shell container — scales with viewport; overlay uses % + cqi inside shell */
+/* Fills the design box (logical “50%” region of the native asset) */
 .qchord-shell-outer {
-  width: min(1100px, 96vw);
-  max-width: 100%;
-  flex-shrink: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
   margin: 0;
   color: rgb(244, 252, 126);
 }
@@ -178,6 +213,7 @@
 .qchord-shell {
   position: relative;
   width: 100%;
+  height: 100%;
   overflow: hidden;
   border-radius: clamp(4px, 1.2cqi, 12px);
   filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.447));
@@ -188,7 +224,8 @@
 .qchord-shell-img {
   display: block;
   width: 100%;
-  height: auto;
+  height: 100%;
+  object-fit: contain;
   vertical-align: middle;
   user-select: none;
   pointer-events: none;
